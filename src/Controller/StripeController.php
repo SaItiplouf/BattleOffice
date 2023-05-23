@@ -11,40 +11,35 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Stripe;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
-
 class StripeController extends AbstractController
 {
 
     #[Route('/stripe', name: 'app_stripe')]
-    public function prepareCharge(RequestStack $requestStack): Response
+    public function prepareCharge(Request $request): Response
     {
-        $session = $requestStack->getSession();
-        $order = $session->getFlashBag()->get('order')[0];
-//        $order = $entityManager->getRepository(Order::class)->find(51);
-        dd($order);
+        $parametres = $request->request->all();
+        $order = $parametres['order'];
+        $id = $order->getId();
         return $this->render('stripe/index.html.twig', [
             'stripe_key' => $_ENV["STRIPE_KEY"],
-            'order' => $order,
+            'orderid' => $id,
+            'price' => $order->getOrderAmount()
         ]);
     }
 
-//
-//    #[Route('/stripe/create-charge/{id}', name: 'app_stripe_charge', methods: ['POST'])]
-//    public function createCharge(Request $request, Order $order)
-//    {
-//        $amount = $order->getProduct()->getPrice();
-//        Stripe\Stripe::setApiKey($_ENV["STRIPE_SECRET"]);
-//        Stripe\Charge::create ([
-//            "amount" => $amount,
-//            "currency" => "usd",
-//            "source" => $request->request->get('stripeToken'),
-//            "description" => "Binaryboxtuts Payment Test"
-//        ]);
-//        $this->addFlash(
-//            'success',
-//            'Payment Successful!'
-//        );
-//        return $this->redirectToRoute('app_stripe', [], Response::HTTP_SEE_OTHER);
-//    }
+
+    #[Route('/stripe/create-charge/{id}', name: 'app_stripe_charge', methods: ['POST', 'GET'])]
+    public function createCharge(Request $request, Order $order)
+    {
+        $amount = $order->getOrderAmount();
+       $test = Stripe\Stripe::setApiKey($_ENV["STRIPE_SECRET"]);
+        Stripe\Charge::create ([
+            "amount" => $amount * 100,
+            "currency" => "eur",
+            "source" => $request->request->get('stripeToken'),
+            "description" => "Polo & Renaud Corporation Payment Test"
+        ]);
+
+        return $this->redirectToRoute('confirmation', [], Response::HTTP_SEE_OTHER);
+    }
 }

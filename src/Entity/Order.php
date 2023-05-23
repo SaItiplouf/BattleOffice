@@ -20,13 +20,15 @@ class Order
     #[ORM\Column(length: 255)]
     private ?string $status = null;
 
-    #[ORM\OneToOne(inversedBy: 'linked_order', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?client $client = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?product $product = null;
+
+    #[ORM\Column]
+    private ?int $order_amount = null;
 
     public function getId(): ?int
     {
@@ -77,6 +79,18 @@ class Order
     public function setProduct(?product $product): self
     {
         $this->product = $product;
+
+        return $this;
+    }
+
+    public function getOrderAmount(): ?int
+    {
+        return $this->order_amount;
+    }
+
+    public function setOrderAmount(int $order_amount): self
+    {
+        $this->order_amount = $order_amount;
 
         return $this;
     }
