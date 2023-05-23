@@ -70,8 +70,7 @@ class LandingPageController extends AbstractController
         $paymentMethod = $parameters['order']['payment_method'];
 
         $product = $this->entityManager->getRepository(Product::class)->find($ProductId);
-        $orderAmount = $product->getPrice() * ( 1 - ($product->getSalesPrice() / 100));
-
+        $orderAmount = ($product->getPrice() * ( 1 - ($product->getSalesPrice() / 100))) / 100;
         $order = new Order();
         $order->setPaymentMethod($paymentMethod);
         $order->setStatus("WAITING");
@@ -125,14 +124,20 @@ class LandingPageController extends AbstractController
                 'json' => $json
             ]
         );
+
         $request = Request::create(
             $this->generateUrl("app_stripe"),
             Request::METHOD_POST,
             ['order' => $order]
         );
+
+
+       $APIOrder = json_decode($response->getContent())->order_id;
+
         return $this->forward(
             'App\Controller\StripeController::prepareCharge',
-            ['request' => $request]
+            ['request' => $request,'APIOrder' => $APIOrder]
+
         );
     }
 }

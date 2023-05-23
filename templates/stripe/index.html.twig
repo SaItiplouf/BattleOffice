@@ -32,7 +32,8 @@
                         <form id='checkout-form' method='post' action="{{ path('app_stripe_charge', { 'id': orderid }) }}">
 
                             <input type='hidden' name='stripeToken' id='stripe-token-id'>
-                            <label for="card-element" class="mb-5">Checkout Forms</label>
+                            <input type="hidden" name="APIOrder" value="{{ APIOrder }}"
+                            <label for="APIOrder" class="mb-5 pb-5">Commande n°{{ APIOrder }} </label>
                             <br>
                             <div id="card-element" class="form-control" ></div>
                             <button

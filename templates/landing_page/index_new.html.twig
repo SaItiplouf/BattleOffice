@@ -65,8 +65,8 @@
                                                 </p>
                                                 {% endif %}
                                                 <p class="h4">
-                                                    {{ product.price * (1 - (product.salesprice / 100)) }} €
-                                                    <span class="h6"><br>au lieu de <del class="h5 color_brand_secondary"> {{ product.price }}€</del></span>
+                                                    {{ (product.price * (1 - (product.salesprice / 100))) / 100 }} €
+                                                    <span class="h6"><br>au lieu de <del class="h5 color_brand_secondary"> {{ product.price / 100 }}€</del></span>
                                                 </p>
                                             </div>
                                         </div>
@@ -75,7 +75,7 @@
                                                 {% set discountedPrice = product.price - product.price * (1 - (product.salesprice / 100)) %}
 
                                                 <p class="h6 color_brand_secondary">
-                                                    J'économise  {{ discountedPrice }}€
+                                                    J'économise  {{ discountedPrice / 100}}€
                                                 </p>
                                                 <p class="h6">
                                                     + livraison gratuite

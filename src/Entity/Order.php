@@ -23,9 +23,9 @@ class Order
     #[ORM\JoinColumn(nullable: false)]
     private ?client $client = null;
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?product $product = null;
+    #[ORM\ManyToOne(targetEntity: Product::class)]
+    #[ORM\JoinColumn(nullable:false, onDelete:"CASCADE")]
+    private ?Product $product = null;
 
     #[ORM\Column]
     private ?int $order_amount = null;

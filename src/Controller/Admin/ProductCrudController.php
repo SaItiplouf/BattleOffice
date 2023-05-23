@@ -4,6 +4,18 @@ namespace App\Controller\Admin;
 
 use App\Entity\Product;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\PercentField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 
 class ProductCrudController extends AbstractCrudController
 {
@@ -12,14 +24,20 @@ class ProductCrudController extends AbstractCrudController
         return Product::class;
     }
 
-    /*
-    public function configureFields(string $pageName): iterable
+
+     public function configureFields(string $pageName): iterable
     {
-        return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
-        ];
+        yield IdField::new('id')->hideOnForm();
+        yield TextField::new('name');
+        yield IntegerField::new('quantity');
+        yield ImageField::new('image')
+            ->setBasePath(__DIR__)
+            ->setUploadDir('public/assets/images');
+        yield IntegerField::new('offer');
+        yield MoneyField::new('price')
+            ->setCurrency('EUR');
+        yield IntegerField::new('sales_price');
+        yield BooleanField::new('popular');
     }
-    */
 }
+
