@@ -20,7 +20,8 @@ class Order
     #[ORM\Column(length: 255)]
     private ?string $status = null;
 
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\OneToOne(targetEntity: Client::class)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?client $client = null;
 
     #[ORM\ManyToOne(targetEntity: Product::class)]
