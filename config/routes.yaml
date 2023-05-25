@@ -8,3 +8,7 @@ traitement_commande:
     path: /traitement
     controller: App\Controller\LandingPageController::traitement
     methods: [GET, POST]
+
+cgv:
+    path: /cgv
+    controller: App\Controller\LandingPageController::afficherCGV

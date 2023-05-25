@@ -25,6 +25,13 @@ class LandingPageController extends AbstractController
 		$this->entityManager = $entityManager;
 		$this->httpClientInterface = $httpClientInterface;
 	}
+
+	#[Route('/cgv', name: 'cgv')]
+	public function afficherCGV(): Response
+	{
+			return $this->render('landing_page/cgv.html.twig');
+	}
+
 	/**
 	 * @Route("/", name="landing_page")
 	 * @throws \Exception
