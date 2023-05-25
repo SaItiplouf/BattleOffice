@@ -35,7 +35,12 @@ class Order
     {
         return $this->id;
     }
+    public function setId(int $id): ?int
+    {
+        $this->id = $id;
 
+        return $this->id;
+    }
     public function getPaymentMethod(): ?string
     {
         return $this->payment_method;

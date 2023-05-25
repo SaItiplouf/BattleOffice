@@ -14,9 +14,11 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Client;
 use App\Entity\Product;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use App\Form\GetOrderType;
 
 class LandingPageController extends AbstractController
 {
+
 	private $entityManager;
 	private HttpClientInterface $httpClientInterface;
 	public function __construct(EntityManagerInterface $entityManager, HttpClientInterface $httpClientInterface)
@@ -32,23 +34,56 @@ class LandingPageController extends AbstractController
 			return $this->render('landing_page/cgv.html.twig');
 	}
 
+
+
+    /**
+     * @Route("/order/{id}", name="get_order")
+     * @throws \Exception
+     */
+    public function getOrder(Request $request, $id)
+    {
+        $order = $this->entityManager->getRepository(Order::class)->find($id);
+
+        return $this->render('landing_page/order.html.twig', [
+            'order' => $order,
+        ]);
+    }
 	/**
 	 * @Route("/", name="landing_page")
 	 * @throws \Exception
 	 */
 	public function index(Request $request): Response
 	{
+      $products = $this->entityManager->getRepository(Product::class)->findAll();
+        $form = $this->createForm(GetOrderType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+
+            $orderId = $data->getId();
+
+            if (!$orderId) {
+                throw $this->createNotFoundException(
+                    'La commande n\'existe pas pour l\'ID '.$orderId
+                );
+            }
+            // Redirection vers la route avec l'ID de commande
+            return $this->redirectToRoute('get_order', ['id' => $orderId]);
+        }
+    
+    
 		$products = $this->entityManager->getRepository(Product::class)->findAll();
 
 		
 		$client = new Client();
-		$form = $this->createForm(ClientType::class, $client);
-		$form->handleRequest($request);
+		$clientForm = $this->createForm(ClientType::class, $client);
+		$clientForm->handleRequest($request);
 		
-		if ($form->isSubmitted() && $form->isValid()) {
+		if ($clientForm->isSubmitted() && $clientForm->isValid()) {
 			
 			// Récupération des données du formulaire
-			$client = $form->getData();
+			$client = $clientForm->getData();
 
 			// Enregistrement du client dans la base de données
 			$this->entityManager->persist($client);
@@ -68,7 +103,8 @@ class LandingPageController extends AbstractController
 		}
 
 		return $this->render('landing_page/index_new.html.twig', [
-			'form' => $form->createView(),
+			'clientForm' => $clientForm->createView(),
+      'form' => $form->createView(),
 			'products' => $products,
 		]);
 
