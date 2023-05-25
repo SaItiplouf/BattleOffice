@@ -613,7 +613,7 @@
 																	{{ product.name }}
 																</td>
 																<td valign="top" class="dataTableContent" mc:edit="data_table_content02">
-																	{{ product.price }} €
+																	{{ (product.price * (1 - (product.salesprice / 100))) / 100 }} €
 																</td>
 															</tr>
 														</table>
