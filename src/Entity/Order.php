@@ -20,7 +20,8 @@ class Order
     #[ORM\Column(length: 255)]
     private ?string $status = null;
 
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\OneToOne(targetEntity: Client::class)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?client $client = null;
 
     #[ORM\ManyToOne(targetEntity: Product::class)]
@@ -34,7 +35,12 @@ class Order
     {
         return $this->id;
     }
+    public function setId(int $id): ?int
+    {
+        $this->id = $id;
 
+        return $this->id;
+    }
     public function getPaymentMethod(): ?string
     {
         return $this->payment_method;

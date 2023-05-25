@@ -3,6 +3,8 @@
 {% block title %}{% endblock %}
 
 {% block body %}
+
+
     <section class="countdown bg_brand_secondary">
         <div class="container-fluid">
             <div class="row">
@@ -25,6 +27,9 @@
             </div>
         </div>
     </section>
+
+
+
     <form action="{{ path('traitement_commande') }}" method="post">
         <div class="container">
             <div class="row">
@@ -81,7 +86,7 @@
                                                     + livraison gratuite
                                                 </p>
                                                 <div class="picto-wrapper">
-                                                    <img src="assets/images/like-product.png" class="responsive-img" alt="Garantie satisfait ou remboursé">
+                                                    <img src="assets/images/like-product2.png" class="responsive-img" alt="Garantie satisfait ou remboursé">
                                                     <p class="color_brand_primary">Satisfait<br>ou remboursé</p>
                                                 </div>
                                             </div>
@@ -92,10 +97,19 @@
                         </label>
                         {% endfor %}
 
-                        <h6 class="center-align">OUI ! Je veux profiter de cette offre exceptionnelle et créer une guerre au bureau.</h6>
-                        <p class="center-align">Je bénéficie gratuitement de la garantie <b>100% satisfait ou remboursé</b><br>A tous moment durant ma cure, je peux retourner mes Nerfs et me faire rembourser immédiatement.</p>
                     </section>
+                    <div class="card">
+                    <div class="container">
+                        {{ form_start(form) }}
+                        <div class="input-field">
+                            {{ form_label(form.id) }}
+                            {{ form_widget(form.id, {'attr': {'class': 'dark-theme'}}) }}
+                        </div>
+                        {{ form_end(form) }}
+                        <br>
+                    </div>
 
+                    </div>
 
                         {% endif %}
 
@@ -211,7 +225,7 @@
                         <div class="row">
                             <div class="col s12">
                                 <div class="card-content picto-wrapper center-align">
-                                    <img src="assets/images/like-big.png" class="responsive-img" alt="Garantie satisfait ou remboursé">
+                                    <img src="assets/images/like-product2.png" class="responsive-img" style="max-width: 160px; "alt="Garantie satisfait ou remboursé">
                                     <p class="color_brand_primary">Satisfait<br>ou remboursé</p>
                                 </div>
                             </div>

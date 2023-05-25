@@ -12,6 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Client;
 use App\Entity\Product;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use App\Form\GetOrderType;
 
 class LandingPageController extends AbstractController
 {
@@ -29,11 +30,42 @@ class LandingPageController extends AbstractController
     public function index(Request $request)
     {
         $products = $this->entityManager->getRepository(Product::class)->findAll();
+        $form = $this->createForm(GetOrderType::class);
+        $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+
+            $orderId = $data->getId();
+
+            if (!$orderId) {
+                throw $this->createNotFoundException(
+                    'La commande n\'existe pas pour l\'ID '.$orderId
+                );
+            }
+            // Redirection vers la route avec l'ID de commande
+            return $this->redirectToRoute('get_order', ['id' => $orderId]);
+        }
         return $this->render('landing_page/index_new.html.twig', [
             'products' => $products,
+            'form' => $form->createView(),
         ]);
     }
+
+
+    /**
+     * @Route("/order/{id}", name="get_order")
+     * @throws \Exception
+     */
+    public function getOrder(Request $request, $id)
+    {
+        $order = $this->entityManager->getRepository(Order::class)->find($id);
+
+        return $this->render('landing_page/order.html.twig', [
+            'order' => $order,
+        ]);
+    }
+
     /**
      * @Route("/confirmation", name="confirmation")
      */
