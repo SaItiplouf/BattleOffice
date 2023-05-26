@@ -1,4 +1,7 @@
 # BattleOffice
+
+Intégration de stripe + api custom pour enregistré les commandes 
+
 ![image](https://github.com/SaItiplouf/BattleOffice/assets/120452681/8db5b02f-4934-4303-a099-e0187f057828)
 ![image](https://github.com/SaItiplouf/BattleOffice/assets/120452681/a88dfa15-f6d8-4628-a74e-3f19b569b50e)
 ![image](https://github.com/SaItiplouf/BattleOffice/assets/120452681/8ec43cbe-a439-4f30-8991-28f0fd3adc20)
