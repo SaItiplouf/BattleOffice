@@ -83,7 +83,7 @@ class StripeController extends AbstractController
                 $this->mailerService->send(
                     'polo&renaud@corporation.test',
                     $order->getClient()->getEmail(),
-                    'Battle Office : Confirmation de votre commande',
+                    'Battle Office : Confirmation de votre commande n°' . $order->getId(),
                     'confirmation',
                     $context
                 );

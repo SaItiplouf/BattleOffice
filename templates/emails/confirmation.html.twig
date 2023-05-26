@@ -546,148 +546,142 @@
 </head>
 
 <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0">
-	<center>
-		<table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="backgroundTable">
-			<tr>
-				<td align="center" valign="top" style="padding-top:20px;">
-					<table border="0" cellpadding="0" cellspacing="0" width="600" id="templateContainer">
-						<tr>
-							<td align="center" valign="top">
-								<!-- // Begin Template Header \\ -->
-								<table border="0" cellpadding="0" cellspacing="0" width="600" id="templateHeader">
-									<tr>
-										<td class="headerContent" style="background: #41b3ff;padding: 10px 0;">
-
-											<!-- // Begin Module: Standard Header Image \\ -->
-											BATTLEOFFICE
-											<!-- // End Module: Standard Header Image \\ -->
-
-										</td>
-									</tr>
-								</table>
-								<!-- // End Template Header \\ -->
-							</td>
-						</tr>
-						<tr>
-							<td align="center" valign="top">
-								<!-- // Begin Template Body \\ -->
-								<table border="0" cellpadding="0" cellspacing="0" width="600" id="templateBody">
-									<tr>
-										<td valign="top">
-
-											<!-- // Begin Module: Standard Content \\ -->
-											<table border="0" cellpadding="20" cellspacing="0" width="100%">
-												<tr>
-													<td valign="top" class="bodyContent">
-														<div mc:edit="std_content00">
-															<h1 class="h1">{{name|capitalize}}, votre commande est en cours de traitement</h1>
-															{#<strong>Getting started:</strong> Transactional emails serve a defined and simple
+<center>
+	<table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="backgroundTable">
+		<tr>
+			<td align="center" valign="top" style="padding-top:20px;">
+				<table border="0" cellpadding="0" cellspacing="0" width="600" id="templateContainer">
+					<tr>
+						<td align="center" valign="top">
+							<!-- // Begin Template Header \\ -->
+							<table border="0" cellpadding="0" cellspacing="0" width="600" id="templateHeader">
+								<tr>
+									<td class="headerContent" style="background: #69bd6d; padding: 10px 0;">
+										<!-- // Begin Module: Standard Header Image \\ -->
+										PêcheMel
+										<!-- // End Module: Standard Header Image \\ -->
+									</td>
+								</tr>
+							</table>
+							<!-- // End Template Header \\ -->
+						</td>
+					</tr>
+					<tr>
+						<td align="center" valign="top">
+							<!-- // Begin Template Body \\ -->
+							<table border="0" cellpadding="0" cellspacing="0" width="600" id="templateBody">
+								<tr>
+									<td valign="top">
+										<!-- // Begin Module: Standard Content \\ -->
+										<table border="0" cellpadding="20" cellspacing="0" width="100%">
+											<tr>
+												<td valign="top" class="bodyContent">
+													<div mc:edit="std_content00">
+														<h1 class="h1">{{name|capitalize}}, votre commande est en cours de traitement</h1>
+														{#<strong>Getting started:</strong> Transactional emails serve a defined and simple
 															purpose. They differ from traditional mass-emails because they're generally sent on a
 															user-by-user basis, instead of large list of users, and are generally used to deliver
 															purchase receipts, account updates, security notifications, and more.#}
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td valign="top" style="padding-top:0; padding-bottom:0;">
-														<table border="0" cellpadding="10" cellspacing="0" width="100%" class="templateDataTable">
-															<tr>
-																<th scope="col" valign="top" width="25%" class="dataTableHeading"
-																	mc:edit="data_table_heading00">
-																	DATE
-																</th>
-																<th scope="col" valign="top" width="50%" class="dataTableHeading"
-																	mc:edit="data_table_heading01">
-																	PRODUIT
-																</th>
-																<th scope="col" valign="top" width="25%" class="dataTableHeading"
-																	mc:edit="data_table_heading02">
-																	PRIX TTC
-																</th>
-															</tr>
-															<tr mc:repeatable>
-																<td valign="top" class="dataTableContent" mc:edit="data_table_content00">
-																	{{ "now"|date('d/m/Y') }}
-																</td>
-																<td valign="top" class="dataTableContent" mc:edit="data_table_content01">
-																	{{ product.name }}
-																</td>
-																<td valign="top" class="dataTableContent" mc:edit="data_table_content02">
-																	{{ (product.price * (1 - (product.salesprice / 100))) / 100 }} €
-																</td>
-															</tr>
-														</table>
-													</td>
-												</tr>
-												<tr>
-													<td valign="top" class="bodyContent">
-														<div mc:edit="std_content01">
-															La facture PDF est en pièce jointe.
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td align="center" valign="top" style="padding-top:0;">
-														<table border="0" cellpadding="15" cellspacing="0" class="templateButton">
-															<tr>
-																<td valign="middle" class="templateButtonContent">
-																	<div mc:edit="std_content02">
-																		<a href="https://www.battleoffice.com/" target="_blank" style="color:white">Visiter
-																			la boutique battleoffice.com</a>
-																	</div>
-																</td>
-															</tr>
-														</table>
-													</td>
-												</tr>
-											</table>
-											<!-- // End Module: Standard Content \\ -->
-
-										</td>
-									</tr>
-								</table>
-								<!-- // End Template Body \\ -->
-							</td>
-						</tr>
-						<tr>
-							<td align="center" valign="top">
-								<!-- // Begin Template Footer \\ -->
-								<table border="0" cellpadding="10" cellspacing="0" width="600" id="templateFooter">
-									<tr>
-										<td valign="top" class="footerContent">
-
-											<!-- // Begin Module: Transactional Footer \\ -->
-											<table border="0" cellpadding="10" cellspacing="0" width="100%">
-												<tr>
-													<td valign="top">
-														<div mc:edit="std_footer">
-															<em>Copyright &copy; {{ "now"|date('Y') }} BattleOffice, Tous droits réservés.</em>
-															<br />
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td valign="middle" id="utility">
-														<div mc:edit="std_utility">
-															&nbsp;
-														</div>
-													</td>
-												</tr>
-											</table>
-											<!-- // End Module: Transactional Footer \\ -->
-
-										</td>
-									</tr>
-								</table>
-								<!-- // End Template Footer \\ -->
-							</td>
-						</tr>
-					</table>
-					<br />
-				</td>
-			</tr>
-		</table>
-	</center>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td valign="top" style="padding-top:0; padding-bottom:0;">
+													<table border="0" cellpadding="10" cellspacing="0" width="100%" class="templateDataTable">
+														<tr>
+															<th scope="col" valign="top" width="25%" class="dataTableHeading"
+																mc:edit="data_table_heading00">
+																DATE
+															</th>
+															<th scope="col" valign="top" width="50%" class="dataTableHeading"
+																mc:edit="data_table_heading01">
+																PRODUIT
+															</th>
+															<th scope="col" valign="top" width="25%" class="dataTableHeading"
+																mc:edit="data_table_heading02">
+																PRIX TTC
+															</th>
+														</tr>
+														<tr mc:repeatable>
+															<td valign="top" class="dataTableContent" mc:edit="data_table_content00">
+																{{ "now"|date('d/m/Y') }}
+															</td>
+															<td valign="top" class="dataTableContent" mc:edit="data_table_content01">
+																{{ product.name }}
+															</td>
+															<td valign="top" class="dataTableContent" mc:edit="data_table_content02">
+																{{ (product.price * (1 - (product.salesprice / 100))) / 100 }} €
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+											<tr>
+												<td valign="top" class="bodyContent">
+													<div mc:edit="std_content01">
+														La facture PDF est en pièce jointe.
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td align="center" valign="top" style="padding-top:0;">
+													<table border="0" cellpadding="15" cellspacing="0" class="templateButton">
+														<tr>
+															<td valign="middle" class="templateButtonContent">
+																<div mc:edit="std_content02">
+																	<a href="https://www.pechemel.com/" target="_blank" style="color:white">Visiter
+																		la boutique pechemel.com</a>
+																</div>
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+										</table>
+										<!-- // End Module: Standard Content \\ -->
+									</td>
+								</tr>
+							</table>
+							<!-- // End Template Body \\ -->
+						</td>
+					</tr>
+					<tr>
+						<td align="center" valign="top">
+							<!-- // Begin Template Footer \\ -->
+							<table border="0" cellpadding="10" cellspacing="0" width="600" id="templateFooter">
+								<tr>
+									<td valign="top" class="footerContent">
+										<!-- // Begin Module: Transactional Footer \\ -->
+										<table border="0" cellpadding="10" cellspacing="0" width="100%">
+											<tr>
+												<td valign="top">
+													<div mc:edit="std_footer">
+														<em>&copy; {{ "now"|date('Y') }} PêcheMel, Tous droits réservés.</em>
+														<br />
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td valign="middle" id="utility">
+													<div mc:edit="std_utility">
+														&nbsp;
+													</div>
+												</td>
+											</tr>
+										</table>
+										<!-- // End Module: Transactional Footer \\ -->
+									</td>
+								</tr>
+							</table>
+							<!-- // End Template Footer \\ -->
+						</td>
+					</tr>
+				</table>
+				<br />
+			</td>
+		</tr>
+	</table>
+</center>
 </body>
 
 </html>
