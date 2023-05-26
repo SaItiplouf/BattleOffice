@@ -9,7 +9,15 @@
 <!-- // End Offer Conversion -->
 
 <div class="container">
-
+    <div class="container">
+        <div class="flash-bar">
+            {% for flashMessage in app.flashes('success') %}
+                <div class="flash-message flash-success">
+                    {{ flashMessage }}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
     <div class="row">
         <div class="content col s12">
             <section class="banner center-align" style="margin: 5rem 0;">

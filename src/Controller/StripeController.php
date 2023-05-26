@@ -26,14 +26,11 @@ class StripeController extends AbstractController
     }
 
     #[Route('/stripe', name: 'app_stripe')]
-    public function prepareCharge(Request $request,int $APIOrder): Response
+    public function prepareCharge(Order $order,int $APIOrder): Response
     {
-        $parametres = $request->request->all();
-        $order = $parametres['order'];
-        $id = $order->getId();
         return $this->render('stripe/index.html.twig', [
             'stripe_key' => $_ENV["STRIPE_KEY"],
-            'orderid' => $id,
+            'orderid' => $order->getId(),
             'price' => $order->getOrderAmount(),
             'APIOrder' => $APIOrder,
         ]);
@@ -93,7 +90,7 @@ class StripeController extends AbstractController
 
                 
             } catch (\Exception $e){
-                $this->addFlash('301', $e->getMessage());
+                $this->addFlash('error', $e->getMessage());
                 return $this->redirectToRoute('landing_page', [], Response::HTTP_SEE_OTHER);
                 //
             }
@@ -104,7 +101,8 @@ class StripeController extends AbstractController
 
 ///
 
-
+        $this->addFlash('success', "Paiement Réussi");
         return $this->redirectToRoute('confirmation', [], Response::HTTP_SEE_OTHER);
+
     }
 }

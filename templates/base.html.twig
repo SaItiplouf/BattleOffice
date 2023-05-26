@@ -13,6 +13,34 @@
     </head>
     <body>
     <style>
+        .flash-bar {
+            width: 100%;
+            opacity: 0.75;
+        }
+
+        .flash-message {
+            padding: 10px;
+            font-family: 'Segoe UI';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 22px;
+            line-height: 28px;
+            color: #fff;
+            text-align: center;
+            opacity: 1;
+        }
+
+        .flash-success {
+            background-color: rgba(76, 175, 80, 0.8); /* Couleur de fond pour les messages de succès avec opacité */
+        }
+
+        .flash-error {
+            background-color: rgba(227, 0, 4, 0.8); /* Couleur de fond pour les messages d'erreur avec opacité */
+        }
+
+        .flash-warning {
+            background-color: rgba(255, 193, 7, 0.8); /* Couleur de fond pour les messages d'avertissement avec opacité */
+        }
 
     </style>
         <div class="navbar">
@@ -42,6 +70,27 @@
         </div>
 
         <main class="page">
+            <div class="container">
+                <div class="flash-bar">
+                    {% for flashMessage in app.flashes('success') %}
+                        <div class="flash-message flash-success">
+                            {{ flashMessage }}
+                        </div>
+                    {% endfor %}
+
+                    {% for flashMessage in app.flashes('error') %}
+                        <div class="flash-message flash-error">
+                            {{ flashMessage }}
+                        </div>
+                    {% endfor %}
+
+                    {% for flashMessage in app.flashes('warning') %}
+                        <div class="flash-message flash-warning">
+                            {{ flashMessage }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
             {% block body %}{% endblock %}
         </main>
 

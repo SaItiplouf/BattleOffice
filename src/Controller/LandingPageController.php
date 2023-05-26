@@ -57,13 +57,13 @@ class LandingPageController extends AbstractController
         $products = $this->entityManager->getRepository(Product::class)->findAll();
 
         $form = $this->createForm(GetOrderType::class);
-        $form2 = $this->createForm(GetOrderType::class);
         $form->handleRequest($request);
-        $form2->handleRequest($request);
+        $client = new Client();
+        $clientForm = $this->createForm(ClientType::class, $client);
+        $clientForm->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid() || $form2->isSubmitted() && $form2->isValid() ) {
+        if ($form->isSubmitted() && $form->isValid())  {
 
-            
             $data = $form->getData();
             $orderId = $data->getId();
 
@@ -72,14 +72,9 @@ class LandingPageController extends AbstractController
                     'La commande n\'existe pas pour l\'ID '.$orderId
                 );
             }
-
             // Redirection vers la route avec l'ID de commande
             return $this->redirectToRoute('get_order', ['id' => $orderId]);
         }
-
-        $client = new Client();
-        $clientForm = $this->createForm(ClientType::class, $client);
-        $clientForm->handleRequest($request);
 
         if ($clientForm->isSubmitted() && $clientForm->isValid()) {
             // Récupération des données du formulaire
@@ -89,10 +84,24 @@ class LandingPageController extends AbstractController
             $this->entityManager->persist($client);
             $this->entityManager->flush();
 
-            // Redirection vers la route 'traitement_commande'
-            return $this->redirectToRoute('traitement_commande', [
-                'client' => $client->getId(),
-            ]);
+            $parameters = $request->request->all()['order'];
+            $productId = $parameters['cart']['cart_products'][0];
+            $paymentMethod = $parameters['payment_method'];
+
+            $zeb = $this->traitement($productId, $paymentMethod, $client);
+            $APIOrderId = $zeb['APIOrderId'];
+            $order = $zeb['order'];
+
+            return $this->forward(
+			'App\Controller\StripeController::prepareCharge',
+		    ['order' => $order, 'APIOrder' => $APIOrderId]
+
+		    );
+
+
+
+
+
         }
 
         return $this->render('landing_page/index_new.html.twig', [
@@ -113,11 +122,10 @@ class LandingPageController extends AbstractController
 	}
 
 //	#[Route('/traitement', name: 'traitement_commande', methods: "POST, GET")]
-	public function traitement(): Response
+	public function traitement(int $ProductId,string $paymentMethod,Client $client )
 	{
-		$ProductId = $request->query->get('ProductId');
-        $paymentMethod = $request->query->get('paymentMethod');
-		$client = $this->entityManager->getRepository(Client::class)->find($request->query->get('client'));
+
+
 
 
 		$product = $this->entityManager->getRepository(Product::class)->find($ProductId);
@@ -130,7 +138,6 @@ class LandingPageController extends AbstractController
 		$order->setOrderAmount($orderAmount);
 		$this->entityManager->persist($order);
 		$this->entityManager->flush($order);
-
 
 		$json =
 			[
@@ -179,19 +186,26 @@ class LandingPageController extends AbstractController
 			]
 		);
 
-		$request = Request::create(
-			$this->generateUrl("app_stripe"),
-			Request::METHOD_POST,
-			['order' => $order]
-		);
+//		$request = Request::create(
+//			$this->generateUrl("app_stripe"),
+//			Request::METHOD_POST,
+//			['order' => $order]
+//		);
+
+        $APIOrderId = json_decode($response->getContent())->order_id;
+
+        $data = [
+            'APIOrderId' => $APIOrderId,
+            'order' => $order
+        ];
+
+        return $data;
 
 
-		$APIOrder = json_decode($response->getContent())->order_id;
-
-		return $this->forward(
-			'App\Controller\StripeController::prepareCharge',
-			['request' => $request, 'APIOrder' => $APIOrder]
-
-		);
+//		return $this->forward(
+//			'App\Controller\StripeController::prepareCharge',
+//			['request' => $request, 'APIOrder' => $APIOrder]
+//
+//		);
 	}
 }
