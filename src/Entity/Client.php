@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ClientRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 class Client
@@ -36,6 +37,9 @@ class Client
 
     #[ORM\Column(length: 255)]
     private ?string $email = null;
+
+    #[Assert\EqualTo(propertyPath:"email", message: 'emails does not match')]
+    public string $email_confirm;
 
     #[ORM\Column(length: 255)]
     private ?string $town = null;
@@ -149,6 +153,26 @@ class Client
     public function setTown(string $town): self
     {
         $this->town = $town;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of email_confirm
+     */ 
+    public function getEmail_confirm()
+    {
+        return $this->email_confirm;
+    }
+
+    /**
+     * Set the value of email_confirm
+     *
+     * @return  self
+     */ 
+    public function setEmail_confirm($email_confirm)
+    {
+        $this->email_confirm = $email_confirm;
 
         return $this;
     }

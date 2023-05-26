@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Order;
+use App\Form\ClientType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,41 +18,22 @@ use App\Form\GetOrderType;
 
 class LandingPageController extends AbstractController
 {
-    private $entityManager;
-    private HttpClientInterface $httpClientInterface;
-    public function __construct(EntityManagerInterface $entityManager, HttpClientInterface $httpClientInterface) {
 
-        $this->entityManager = $entityManager;
-        $this->httpClientInterface = $httpClientInterface;
-    }
-    /**
-     * @Route("/", name="landing_page")
-     * @throws \Exception
-     */
-    public function index(Request $request)
-    {
-        $products = $this->entityManager->getRepository(Product::class)->findAll();
-        $form = $this->createForm(GetOrderType::class);
-        $form->handleRequest($request);
+	private $entityManager;
+	private HttpClientInterface $httpClientInterface;
+	public function __construct(EntityManagerInterface $entityManager, HttpClientInterface $httpClientInterface)
+	{
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
+		$this->entityManager = $entityManager;
+		$this->httpClientInterface = $httpClientInterface;
+	}
 
-            $orderId = $data->getId();
+	#[Route('/cgv', name: 'cgv')]
+	public function afficherCGV(): Response
+	{
+			return $this->render('landing_page/cgv.html.twig');
+	}
 
-            if (!$orderId) {
-                throw $this->createNotFoundException(
-                    'La commande n\'existe pas pour l\'ID '.$orderId
-                );
-            }
-            // Redirection vers la route avec l'ID de commande
-            return $this->redirectToRoute('get_order', ['id' => $orderId]);
-        }
-        return $this->render('landing_page/index_new.html.twig', [
-            'products' => $products,
-            'form' => $form->createView(),
-        ]);
-    }
 
 
     /**
@@ -65,111 +48,150 @@ class LandingPageController extends AbstractController
             'order' => $order,
         ]);
     }
-
     /**
-     * @Route("/confirmation", name="confirmation")
+     * @Route("/", name="landing_page")
+     * @throws \Exception
      */
-    public function confirmation()
+    public function index(Request $request): Response
     {
-        return $this->render('landing_page/confirmation.html.twig', [
+        $products = $this->entityManager->getRepository(Product::class)->findAll();
 
+        $form = $this->createForm(GetOrderType::class);
+        $form2 = $this->createForm(GetOrderType::class);
+        $form->handleRequest($request);
+        $form2->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid() || $form2->isSubmitted() && $form2->isValid() ) {
+
+            
+            $data = $form->getData();
+            $orderId = $data->getId();
+
+            if (!$orderId) {
+                throw $this->createNotFoundException(
+                    'La commande n\'existe pas pour l\'ID '.$orderId
+                );
+            }
+
+            // Redirection vers la route avec l'ID de commande
+            return $this->redirectToRoute('get_order', ['id' => $orderId]);
+        }
+
+        $client = new Client();
+        $clientForm = $this->createForm(ClientType::class, $client);
+        $clientForm->handleRequest($request);
+
+        if ($clientForm->isSubmitted() && $clientForm->isValid()) {
+            // Récupération des données du formulaire
+            $client = $clientForm->getData();
+
+            // Enregistrement du client dans la base de données
+            $this->entityManager->persist($client);
+            $this->entityManager->flush();
+
+            // Redirection vers la route 'traitement_commande'
+            return $this->redirectToRoute('traitement_commande', [
+                'client' => $client->getId(),
+            ]);
+        }
+
+        return $this->render('landing_page/index_new.html.twig', [
+            'clientForm' => $clientForm->createView(),
+            'form' => $form->createView(),
+            'products' => $products,
         ]);
     }
 
-    #[Route('/traitement', name: 'traitement_commande', methods: "POST")]
-    public function traitement(Request $request): Response
-    {
+	/**
+	 * @Route("/confirmation", name="confirmation")
+	 */
+	public function confirmation()
+	{
+		return $this->render('landing_page/confirmation.html.twig', [
 
-        $parameters = $request->request->all();
-        $clientData = $parameters['client'];
-        $client = new Client();
+		]);
+	}
 
-        $client->setFirstname($clientData['firstname']);
-        $client->setLastname($clientData['lastname']);
-        $client->setAddress($clientData['address']);
-        $client->setConfirmAddress($clientData['confirm_address']);
-        $client->setTown($clientData['town']);
-        $client->setPostcode($clientData['postcode']);
-        $client->setCountry($clientData['country']);
-        $client->setPhone($clientData['phone']);
-        $client->setEmail($clientData['mail']);
-
-        $this->entityManager->persist($client);
-        $this->entityManager->flush($client);
+//	#[Route('/traitement', name: 'traitement_commande', methods: "POST, GET")]
+	public function traitement(): Response
+	{
+		$ProductId = $request->query->get('ProductId');
+        $paymentMethod = $request->query->get('paymentMethod');
+		$client = $this->entityManager->getRepository(Client::class)->find($request->query->get('client'));
 
 
-        $ProductId = $parameters['order']['cart']['cart_products'][0];
-        $paymentMethod = $parameters['order']['payment_method'];
-
-        $product = $this->entityManager->getRepository(Product::class)->find($ProductId);
-        $orderAmount = ($product->getPrice() * ( 1 - ($product->getSalesPrice() / 100))) / 100;
-        $order = new Order();
-        $order->setPaymentMethod($paymentMethod);
-        $order->setStatus("WAITING");
-        $order->setClient($client);
-        $order->setProduct($product);
-        $order->setOrderAmount($orderAmount);
-        $this->entityManager->persist($order);
-        $this->entityManager->flush($order);
+		$product = $this->entityManager->getRepository(Product::class)->find($ProductId);
+		$orderAmount = ($product->getPrice() * (1 - ($product->getSalesPrice() / 100))) / 100;
+		$order = new Order();
+		$order->setPaymentMethod($paymentMethod);
+		$order->setStatus("WAITING");
+		$order->setClient($client);
+		$order->setProduct($product);
+		$order->setOrderAmount($orderAmount);
+		$this->entityManager->persist($order);
+		$this->entityManager->flush($order);
 
 
-        $json =
-        ['order' => [
-            'id' => $order->getId(),
-            'product' => $order->getProduct()->getName(),
-            'payment_method' => $order->getPaymentMethod(),
-            'status' => $order->getStatus(),
-            'client' => [
-                'firstname' => $order->getClient()->getFirstname(),
-                'lastname' => $order->getClient()->getLastname(),
-                'email' => $order->getClient()->getEmail()
-            ],
-            'addresses' => [
-                'billing' => [
-                    'address_line1' => $order->getClient()->getAddress(),
-                    'address_line2' => $order->getClient()->getConfirmAddress(),
-                    'city' => $order->getClient()->getTown(),
-                    'zipcode' => $order->getClient()->getPostcode(),
-                    'country' => $order->getClient()->getCountry(),
-                    'phone' => $order->getClient()->getPhone()
-                ],
-                'shipping' => [
-                    'address_line1' => $order->getClient()->getAddress(),
-                    'address_line2' => $order->getClient()->getConfirmAddress(),
-                    'city' => $order->getClient()->getTown(),
-                    'zipcode' => $order->getClient()->getPostcode(),
-                    'country' => $order->getClient()->getCountry(),
-                    'phone' => $order->getClient()->getPhone()
-                ]
-            ]]];
+		$json =
+			[
+				'order' => [
+					'id' => $order->getId(),
+					'product' => $order->getProduct()->getName(),
+					'payment_method' => $order->getPaymentMethod(),
+					'status' => $order->getStatus(),
+					'client' => [
+						'firstname' => $order->getClient()->getFirstname(),
+						'lastname' => $order->getClient()->getLastname(),
+						'email' => $order->getClient()->getEmail()
+					],
+					'addresses' => [
+						'billing' => [
+							'address_line1' => $order->getClient()->getAddress(),
+							'address_line2' => $order->getClient()->getConfirmAddress(),
+							'city' => $order->getClient()->getTown(),
+							'zipcode' => $order->getClient()->getPostcode(),
+							'country' => $order->getClient()->getCountry(),
+							'phone' => $order->getClient()->getPhone()
+						],
+						'shipping' => [
+							'address_line1' => $order->getClient()->getAddress(),
+							'address_line2' => $order->getClient()->getConfirmAddress(),
+							'city' => $order->getClient()->getTown(),
+							'zipcode' => $order->getClient()->getPostcode(),
+							'country' => $order->getClient()->getCountry(),
+							'phone' => $order->getClient()->getPhone()
+						]
+					]
+				]
+			];
 
 
-        $response = $this->httpClientInterface->request(
-            'POST',
-            'https://api-commerce.simplon-roanne.com/order',
-            [
-                'headers'=> [
-                    'Content-Type'=> 'application/json',
-                    'accept'=> 'application/json',
-                    'Authorization' => 'Bearer mJxTXVXMfRzLg6ZdhUhM4F6Eutcm1ZiPk4fNmvBMxyNR4ciRsc8v0hOmlzA0vTaX'
-                ],
-                'json' => $json
-            ]
-        );
+		$response = $this->httpClientInterface->request(
+			'POST',
+			'https://api-commerce.simplon-roanne.com/order',
+			[
+				'headers' => [
+					'Content-Type' => 'application/json',
+					'accept' => 'application/json',
+					'Authorization' => 'Bearer mJxTXVXMfRzLg6ZdhUhM4F6Eutcm1ZiPk4fNmvBMxyNR4ciRsc8v0hOmlzA0vTaX'
+				],
+				'json' => $json
+			]
+		);
 
-        $request = Request::create(
-            $this->generateUrl("app_stripe"),
-            Request::METHOD_POST,
-            ['order' => $order]
-        );
+		$request = Request::create(
+			$this->generateUrl("app_stripe"),
+			Request::METHOD_POST,
+			['order' => $order]
+		);
 
 
-       $APIOrder = json_decode($response->getContent())->order_id;
+		$APIOrder = json_decode($response->getContent())->order_id;
 
-        return $this->forward(
-            'App\Controller\StripeController::prepareCharge',
-            ['request' => $request,'APIOrder' => $APIOrder]
+		return $this->forward(
+			'App\Controller\StripeController::prepareCharge',
+			['request' => $request, 'APIOrder' => $APIOrder]
 
-        );
-    }
+		);
+	}
 }
