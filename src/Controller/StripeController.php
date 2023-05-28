@@ -75,9 +75,9 @@ class StripeController extends AbstractController
                 $this->entityManager->flush();
 
                 // On crée les données du mail
-                $name = $order->getClient()->getFirstname();
+                $client = $order->getClient();
                 $product = $order->getProduct();
-                $context = ['name' => $name, 'product' => $product];
+                $context = ['client' => $client, 'product' => $product];
 
                 // Envoi du mail
                 $this->mailerService->send(

@@ -577,7 +577,7 @@
 											<tr>
 												<td valign="top" class="bodyContent">
 													<div mc:edit="std_content00">
-														<h1 class="h1">{{name|capitalize}}, votre commande est en cours de traitement</h1>
+														<h1 class="h1">{{client.firstname|capitalize}}, votre commande est en cours de traitement</h1>
 														{#<strong>Getting started:</strong> Transactional emails serve a defined and simple
 															purpose. They differ from traditional mass-emails because they're generally sent on a
 															user-by-user basis, instead of large list of users, and are generally used to deliver
@@ -616,10 +616,59 @@
 													</table>
 												</td>
 											</tr>
+											<!-- // Begin Module: Addresses table \\ -->
+											<tr>
+												<td valign="top" align="center">
+													<table class="striped" style="width: 80%; margin: auto;">
+														<thead>
+															<tr>
+																<th>Adresse de facturation</th>
+																<th>Adresse de livraison</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr>
+																<td style="padding-right: 30px;">
+																	<div class="input-field">
+																		{{client.firstname}} {{client.lastname}}<br>
+																		{{client.address}}<br>
+																		{{ client.confirmAddress ?? '' }}<br>
+																		{{client.postcode}} {{client.town}}<br>
+																		{{client.country}}<br>
+																		{{client.phone}}<br>
+																	</div>
+																</td>
+																<td style="padding-left: 30px;">
+																	<div class="input-field">
+																		{% if client.shipping_firstname is defined and client.shipping_firstname %}
+																		{{client.shipping_firstname}} {{client.shippingLastname}}<br>
+																		{{client.shippingAddress}}<br>
+																		{{ client.shippingConfirmAddress ?? '' }}<br>
+																		{{client.shippingPostcode}} {{client.shippingTown}}<br>
+																		{{client.shippingCountry}}<br>
+																		{{client.shippingPhone}}<br>
+
+																		{% else %}
+
+																		{{client.firstname}} {{client.lastname}}<br>
+																		{{client.address}}<br>
+																		{{ client.confirmAddress ?? '' }}<br>
+																		{{client.postcode}} {{client.town}}<br>
+																		{{client.country}}<br>
+																		{{client.phone}}<br>
+																		{% endif %}
+																	</div>
+																</td>
+															</tr>
+														</tbody>
+													</table>
+												</td>
+											</tr>
+											<!-- // End Module: Addresses table \\ -->
 											<tr>
 												<td valign="top" class="bodyContent">
 													<div mc:edit="std_content01">
-														La facture PDF est en pièce jointe.
+														{# La facture PDF est en pièce jointe. #}
 													</div>
 												</td>
 											</tr>
