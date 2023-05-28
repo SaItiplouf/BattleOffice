@@ -68,59 +68,58 @@
     </div>
 </div>
 
-{{ form_end(clientForm) }}
+
 	</div>
 
-   <ul class="collapsible">
+    <ul class="collapsible">
         <li>
             <div class="collapsible-header"><i class="material-icons">markunread_mailbox</i>Adresse de livraison différente ?</div>
             <div class="collapsible-body">
                 <div class="input-field">
-                    <input type="text">
-                    <label>Prénom</label>
-                    <div class="form-error"></div>
+                    {{ form_widget(clientForm.shipping_firstname) }}
+                    {{ form_label(clientForm.shipping_firstname) }}
+                    <div class="form-error">{{ form_errors(clientForm.shipping_firstname) }}</div>
                 </div>
                 <div class="input-field">
-                    <input type="text">
-                    <label>Nom</label>
-                    <div class="form-error"></div>
+                    {{ form_widget(clientForm.shipping_lastname) }}
+                    {{ form_label(clientForm.shipping_lastname) }}
+                    <div class="form-error">{{ form_errors(clientForm.shipping_lastname) }}</div>
                 </div>
                 <div class="input-field">
-                    <input type="text">
-                    <label>Adresse</label>
-                    <div class="form-error"></div>
+                    {{ form_widget(clientForm.shipping_address) }}
+                    {{ form_label(clientForm.shipping_address) }}
+                    <div class="form-error">{{ form_errors(clientForm.shipping_address) }}</div>
                 </div>
                 <div class="input-field">
-                    <input type="text">
-                    <label>Complément adr.</label>
-                    <div class="form-error"></div>
+                    {{ form_widget(clientForm.shipping_confirm_address) }}
+                    {{ form_label(clientForm.shipping_confirm_address) }}
+                    <div class="form-error">{{ form_errors(clientForm.shipping_confirm_address) }}</div>
                 </div>
                 <div class="input-field">
-                    <input type="text">
-                    <label>Ville</label>
-                    <div class="form-error"></div>
+                    {{ form_widget(clientForm.shipping_town) }}
+                    {{ form_label(clientForm.shipping_town) }}
+                    <div class="form-error">{{ form_errors(clientForm.shipping_town) }}</div>
                 </div>
                 <div class="input-field">
-                    <input type="text">
-                    <label>Code postal</label>
-                    <div class="form-error"></div>
+                    {{ form_widget(clientForm.shipping_postcode) }}
+                    {{ form_label(clientForm.shipping_postcode) }}
+                    <div class="form-error">{{ form_errors(clientForm.shipping_postcode) }}</div>
                 </div>
                 <div class="input-field">
-                    <select>
-                        <option>France</option>
-                    </select>
-                    <label>Pays</label>
-                    <div class="form-error"></div>
+                    {{ form_widget(clientForm.shipping_country) }}
+                    {{ form_label(clientForm.shipping_country) }}
+                    <div class="form-error">{{ form_errors(clientForm.shipping_country) }}</div>
                 </div>
                 <div class="input-field">
-                    <input type="text">
-                    <label>Téléphone</label>
-                    <div class="form-error"></div>
+                    {{ form_widget(clientForm.shipping_phone) }}
+                    {{ form_label(clientForm.shipping_phone) }}
+                    <div class="form-error">{{ form_errors(clientForm.shipping_phone) }}</div>
                 </div>
             </div>
         </li>
     </ul>
 </div>
+{{ form_end(clientForm) }}
 {# Etape 3 #}
 <div class="card step_3">
 	<div class="card-content">

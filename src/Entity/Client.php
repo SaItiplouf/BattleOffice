@@ -43,6 +43,29 @@ class Client
 
     #[ORM\Column(length: 255)]
     private ?string $town = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    public ?string $shipping_firstname = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $shipping_lastname = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $shipping_address = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $shipping_confirm_address = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $shipping_postcode = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $shipping_country = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $shipping_town = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $shipping_phone = null;
 
     public function getId(): ?int
     {
@@ -176,4 +199,115 @@ class Client
 
         return $this;
     }
+
+    public function setShippingFirstname(?string $shipping_firstname): self
+    {
+        $this->shipping_firstname = $shipping_firstname;
+
+        return $this;
+    }
+
+    public function getShippingLastname(): ?string
+    {
+        return $this->shipping_lastname;
+    }
+
+    public function setShippingLastname(?string $shipping_lastname): self
+    {
+        $this->shipping_lastname = $shipping_lastname;
+
+        return $this;
+    }
+
+    public function getShippingAddress(): ?string
+    {
+        return $this->shipping_address;
+    }
+
+    public function setShippingAddress(?string $shipping_address): self
+    {
+        $this->shipping_address = $shipping_address;
+
+        return $this;
+    }
+
+    public function getShippingConfirmAddress(): ?string
+    {
+        return $this->shipping_confirm_address;
+    }
+
+    public function setShippingConfirmAddress(?string $shipping_confirm_address): self
+    {
+        $this->shipping_confirm_address = $shipping_confirm_address;
+
+        return $this;
+    }
+
+    public function getShippingPostcode(): ?int
+    {
+        return $this->shipping_postcode;
+    }
+
+    public function setShippingPostcode(?int $shipping_postcode): self
+    {
+        $this->shipping_postcode = $shipping_postcode;
+
+        return $this;
+    }
+
+    public function getShippingCountry(): ?string
+    {
+        return $this->shipping_country;
+    }
+
+    public function setShippingCountry(?string $shipping_country): self
+    {
+        $this->shipping_country = $shipping_country;
+
+        return $this;
+    }
+
+    public function getShippingTown(): ?string
+    {
+        return $this->shipping_town;
+    }
+
+    public function setShippingTown(?string $shipping_town): self
+    {
+        $this->shipping_town = $shipping_town;
+
+        return $this;
+    }
+
+    public function getShippingPhone(): ?string
+    {
+        return $this->shipping_phone;
+    }
+
+    public function setShippingPhone(?string $shipping_phone): self
+    {
+        $this->shipping_phone = $shipping_phone;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of shipping_firstname
+     */ 
+    public function getShipping_firstname()
+    {
+        return $this->shipping_firstname;
+    }
+
+    /**
+     * Set the value of shipping_firstname
+     *
+     * @return  self
+     */ 
+    public function setShipping_firstname($shipping_firstname)
+    {
+        $this->shipping_firstname = $shipping_firstname;
+
+        return $this;
+    } 
 }

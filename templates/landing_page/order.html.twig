@@ -6,7 +6,7 @@
 {% block body %}
 <style>
     body {
-        overflow : hidden;
+        overflow-x : hidden;
     }
 </style>
     {% if order %}
@@ -33,7 +33,73 @@
                     <p class="card-text">Montant de la commande : {{ order.orderAmount }}€</p>
                     <p class="card-text">Identifiant du client : {{ order.client.id }}</p>
                     <p class="card-text">Nom du client : {{ order.client.firstname }} {{ order.client.lastname }}</p>
-                    <p class="card-text">Date de livraison : <span id="delivery-date"></span></p>
+                    <p class="card-text">Date de livraison : 
+                        <span id="delivery-date">
+                            {% set minDays = "+3 day"|date("U") %}
+                            {% set maxDays = "+15 days"|date("U") - minDays %}
+                            {% set randomNumber = random(0, maxDays) %}
+                            {% set randomDate = minDays + randomNumber %}
+                            {{ randomDate|date("d F Y")|replace({
+                                "January": "janvier",
+                                "February": "février",
+                                "March": "mars",
+                                "April": "avril",
+                                "May": "mai",
+                                "June": "juin",
+                                "July": "juillet",
+                                "August": "août",
+                                "September": "septembre",
+                                "October": "octobre",
+                                "November": "novembre",
+                                "December": "décembre"
+                            }) }}
+                        </span>
+                    </p>
+
+                    <table class="striped" style="width: 80%; margin: auto;">
+                        <thead>
+                            <tr>
+                                <th>Adresse de facturation</th>
+                                <th>Adresse de livraison</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding-right: 30px;">
+                                    <div class="input-field">
+                                        {{order.client.firstname}} {{order.client.lastname}}<br>
+                                        {{order.client.address}}<br>
+                                        {{ order.client.confirmAddress ?? '' }}<br>
+                                        {{order.client.postcode}} {{order.client.town}}<br>
+                                        {{order.client.country}}<br>
+                                        {{order.client.phone}}<br>
+                                    </div>
+                                </td>
+                                <td style="padding-left: 30px;">
+                                    <div class="input-field">
+                                        {% if order.client.shipping_firstname is defined and order.client.shipping_firstname %}
+                                        
+                                        {{order.client.shipping_firstname}} {{order.client.shippingLastname}}<br>
+                                        {{order.client.shippingAddress}}<br>
+                                        {{ order.client.shippingConfirmAddress ?? '' }}<br>
+                                        {{order.client.shippingPostcode}} {{order.client.shippingTown}}<br>
+                                        {{order.client.shippingCountry}}<br>
+                                        {{order.client.shippingPhone}}<br>
+
+                                        {% else %}
+
+                                        {{order.client.firstname}} {{order.client.lastname}}<br>
+                                        {{order.client.address}}<br>
+                                        {{ order.client.confirmAddress ?? '' }}<br>
+                                        {{order.client.postcode}} {{order.client.town}}<br>
+                                        {{order.client.country}}<br>
+                                        {{order.client.phone}}<br>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 {% else %}
                     <p class="card-text">Aucune commande trouvée</p>
                 {% endif %}

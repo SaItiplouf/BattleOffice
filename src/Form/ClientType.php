@@ -60,6 +60,49 @@ class ClientType extends AbstractType
             ->add('email_confirm', EmailType::class, [
                 'label' => 'Confirmation email'
             ])
+            ->add('shipping_firstname', TextType::class, [
+                'label' => 'Prénom',
+                'required' => false
+            ])
+            ->add('shipping_lastname', TextType::class, [
+                'label' => 'Nom',
+                'required' => false
+            ])
+            ->add('shipping_address', TextType::class, [
+                'label' => 'Adresse',
+                'required' => false
+            ])
+            ->add('shipping_confirm_address', TextType::class, [
+                'label' => 'Complément adr.',
+                'required' => false
+            ])
+            ->add('shipping_town', TextType::class, [
+                'label' => 'Ville',
+                'required' => false
+            ])
+            ->add('shipping_postcode', IntegerType::class, [
+                'label' => 'Code postal',
+                'required' => false,
+                'attr' => [
+                    'min' => 01000,
+                    'max' => 90000
+                ]
+            ])
+            ->add('shipping_country', ChoiceType::class, [
+                'label' => 'Pays',
+                'choices' => [
+                    'France' => 'France',
+                    'Belgique' => 'Belgique',
+                    'Suisse' => 'Suisse',
+                    'UK' => 'UK',
+                    'Turquie' => 'Turquie',
+                    'Argentine' => 'Argentine'
+                ],
+            ])
+            ->add('shipping_phone', TelType::class, [
+                'label' => 'Téléphone',
+                'required' => false
+            ])
         ;
     }
 
